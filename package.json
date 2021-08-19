@@ -1,0 +1,17 @@
+{
+  "name": "new-bot",
+  "version": "1.0.0",
+  "description": "new discord bot for project baro rp",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Fuuka#6189",
+  "license": "ISC",
+  "dependencies": {
+    "@discordjs/builders": "^0.5.0",
+    "discord.js": "^13.1.0",
+    "moment": "^2.29.1",
+    "utf-8-validate": "^5.0.5"
+  }
+}
