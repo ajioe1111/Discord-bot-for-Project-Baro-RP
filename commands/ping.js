@@ -1,7 +1,8 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const wait = require('util').promisify(setTimeout);
+import { SlashCommandBuilder } from '@discordjs/builders';
+const promisify = f => (...args) => new Promise((a,b)=>f(...args, (err, res) => err ? b(err) : a(res)));
+const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-module.exports = {
+export default {
 	data: new SlashCommandBuilder()
 		.setName('ping')
 		.setDescription('Replies with Pong!'),
@@ -10,6 +11,6 @@ module.exports = {
 		await wait(4000);
 		await interaction.editReply('Pong!');
 		await interaction.followUp({ content: 'Pong again!', ephemeral: true });
-		
+
 	},
 };

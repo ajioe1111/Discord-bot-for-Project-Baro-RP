@@ -1,7 +1,7 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageActionRow, MessageSelectMenu } = require('discord.js');
+import { SlashCommandBuilder } from '@discordjs/builders';
+import { MessageActionRow, MessageSelectMenu } from 'discord.js';
 
-module.exports = {
+export default {
 	data: new SlashCommandBuilder()
 		.setName('user-info')
 		.setDescription('Display info about yourself.'),
@@ -26,6 +26,6 @@ module.exports = {
 			);
 
 		await interaction.reply({ content: 'Pong!', components: [row] });
-		
+
 	},
 };

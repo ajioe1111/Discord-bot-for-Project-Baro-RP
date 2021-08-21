@@ -1,26 +1,38 @@
-const fs = require('fs');
-const { Client, Collection, Intents } = require('discord.js');
-const { token, owner, client_id } = require('./configuration.json');
+import fs from 'fs';
+import { Client, Collection, Intents } from 'discord.js';
+import config from './configuration.js';
+
 
 const client = new Client({ intents: new Intents(32767) });
 client.commands = new Collection();
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
+const importPromises = [];
 
 for (const file of commandFiles) {
-	const command = require(`./commands/${file}`);
-	client.commands.set(command.data.name, command);
+	const fileName = `./commands/${file}`;
+	importPromises.push(import(fileName)
+		.then(module => client.commands.set(module.default.data.name, module.default))
+		.catch(console.error));
 }
+
 for (const file of eventFiles) {
-	const event = require(`./events/${file}`);
-	if (event.once) {
-		client.once(event.name, (...args) => event.execute(...args, client));
-	} else {
-		client.on(event.name, (...args) => event.execute(...args, client));
-	}
+	const fileName = `./events/${file}`;
+	importPromises.push(import(fileName)
+		.then(module => {
+			if (module.once) {
+				client.once(module.name, (...args) => module.execute(...args, client));
+			} else {
+				client.on(module.name, (...args) => module.execute(...args, client));
+			}
+		})
+		.catch(console.error));
 }
-const commandsInfo = client.commands.map(kvp => kvp.data);
+
+
+
+
 
 // Когда бот запустился
 client.once('ready', () => {
@@ -33,16 +45,17 @@ client.on('guildCreate', async (guild) => {
 	await initAppCommands(guild.id);
 });
 
-const { REST } = require('@discordjs/rest');
-const { Routes } = require('discord-api-types/v9');
-const rest = new REST({ version: '9' }).setToken(token);
+import { REST } from '@discordjs/rest';
+import { Routes } from 'discord-api-types/v9';
+const rest = new REST({ version: '9' }).setToken(config.token);
 
 async function initAppCommands(guildId) {
+	const commandsInfo = client.commands.map(module => module.data);
 	try {
 		console.log('Started refreshing application (/) commands.');
 
 		await rest.put(
-			Routes.applicationGuildCommands(client_id, guildId),
+			Routes.applicationGuildCommands(config.client_id, guildId),
 			{ body: commandsInfo },
 		);
 		//await rest.put(
@@ -75,4 +88,7 @@ client.on('interactionCreate', async interaction => {
 		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
 	}
 });
-client.login(token);
+
+Promise.all(importPromises)
+	.then(() => client.login(config.token))
+	.catch(console.error);

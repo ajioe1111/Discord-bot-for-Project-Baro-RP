@@ -12,6 +12,8 @@
     "@discordjs/builders": "^0.5.0",
     "discord.js": "^13.1.0",
     "moment": "^2.29.1",
-    "utf-8-validate": "^5.0.5"
-  }
+    "utf-8-validate": "^5.0.5",
+    "util": "^0.12.4"
+  },
+  "type": "module"
 }

@@ -1,6 +1,6 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+import { SlashCommandBuilder } from '@discordjs/builders';
 
-module.exports = {
+export default {
 	data: new SlashCommandBuilder()
 		.setName('avatar')
 		.setDescription('Дает ссылку на аватар юзера или на ваш собственный аватар.')

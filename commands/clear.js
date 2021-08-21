@@ -1,15 +1,15 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+import { SlashCommandBuilder } from '@discordjs/builders';
 
-module.exports = {
+export default {
 	data: new SlashCommandBuilder()
 		.setName('clear')
 		.setDescription('Удаляет до 99 сообщений.')
-		.addIntegerOption(option => 
+		.addIntegerOption(option =>
 			option
-			.setName('число')
-			.setRequired(true)
-			.setDescription('Число сообщений которые надо удалить')),
-		
+				.setName('число')
+				.setRequired(true)
+				.setDescription('Число сообщений которые надо удалить')),
+
 	async execute(interaction) {
 		const amount = interaction.options.getInteger('число');
 

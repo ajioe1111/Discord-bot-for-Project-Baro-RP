@@ -1,23 +1,18 @@
-const Discord = require("discord.js");
-const  checkRole  = require("../service/checkRole.js");
-
-
-
-
+import Discord from 'discord.js';
 
 /**
  * 
  * @param {Discord.Message} message 
  */
-function getMember(message) {
-	return message.member;
+function test(message) {
+
 }
 
-module.exports = {
+
+export default {
 	name: 'messageCreate',
 	once: false,
 	execute(message) {
-		const member = getMember(message);
-		checkRole(member);
+
 	},
 };
