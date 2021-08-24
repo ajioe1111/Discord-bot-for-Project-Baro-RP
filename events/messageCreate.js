@@ -1,10 +1,12 @@
 import Discord from 'discord.js';
 
+
+
 /**
  * 
  * @param {Discord.Message} message 
  */
-function test(message) {
+function messageHandler(message) {
 
 }
 
@@ -13,6 +15,6 @@ export default {
 	name: 'messageCreate',
 	once: false,
 	execute(message) {
-
+		messageHandler(message);
 	},
 };

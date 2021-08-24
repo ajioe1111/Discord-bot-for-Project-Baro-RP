@@ -1,9 +1,10 @@
 import fs from 'fs';
 import { Client, Collection, Intents } from 'discord.js';
 import config from './configuration.js';
+export const owner = config.owner;
 
 
-const client = new Client({ intents: new Intents(32767) });
+export const client = new Client({ intents: new Intents(32767) });
 client.commands = new Collection();
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
@@ -21,24 +22,18 @@ for (const file of eventFiles) {
 	const fileName = `./events/${file}`;
 	importPromises.push(import(fileName)
 		.then(module => {
-			if (module.once) {
-				client.once(module.name, (...args) => module.execute(...args, client));
+			if (module.default.once) {
+				client.once(module.default.name, (...args) => module.default.execute(...args, client));
 			} else {
-				client.on(module.name, (...args) => module.execute(...args, client));
+				client.on(module.default.name, (...args) => module.default.execute(...args, client));
 			}
 		})
 		.catch(console.error));
 }
 
-
-
-
-
 // Когда бот запустился
 client.once('ready', () => {
-	console.log('Bot is started now!');
 	client.guilds.cache.forEach(async guild => await initAppCommands(guild.id));
-
 });
 
 client.on('guildCreate', async (guild) => {
@@ -47,6 +42,7 @@ client.on('guildCreate', async (guild) => {
 
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
+import { interactionHandler } from './service/interactionHandler.js';
 const rest = new REST({ version: '9' }).setToken(config.token);
 
 async function initAppCommands(guildId) {
@@ -69,13 +65,11 @@ async function initAppCommands(guildId) {
 	}
 };
 client.on('interactionCreate', async interaction => {
-	console.log(interaction);
+	await interactionHandler(interaction);
 	if (interaction.customId === 'select') {
 		await interaction.update({ content: 'Something was selected!', components: [] });
 	}
-	if (interaction.customId === 'primary') {
-		await interaction.reply('asd');
-	}
+
 
 	const command = client.commands.get(interaction.commandName);
 
@@ -88,6 +82,11 @@ client.on('interactionCreate', async interaction => {
 		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
 	}
 });
+
+
+
+
+
 
 Promise.all(importPromises)
 	.then(() => client.login(config.token))
