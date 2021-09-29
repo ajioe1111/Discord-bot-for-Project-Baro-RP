@@ -1,0 +1,113 @@
+{
+    "users_list": [
+        {
+            "id": "333660691644809216",
+            "username": "Fuuka",
+            "properties": {
+                "level": 0,
+                "xp": 4441,
+                "warn": 0,
+                "join_hub": true,
+                "coin": 558,
+                "joinDate": "2020-12-13T15:17:06.628Z",
+                "experienceGainDate": "2021-08-16T15:07:35.187Z",
+                "stepToCoin": 0,
+                "gameLoss": 0,
+                "gameWin": 0,
+                "test": 0
+            },
+            "items": [
+                {
+                    "name": "Карта доступа",
+                    "count": 1,
+                    "uses": 10000,
+                    "description": "Ваша персональная карта доступа",
+                    "content": "Вы осмотрели свою карту... карта как карта."
+                }
+            ]
+        },
+        {
+            "id": "797818679071997954",
+            "username": "A.I Covenant",
+            "properties": {
+                "level": 0,
+                "xp": 0,
+                "warn": 0,
+                "join_hub": true,
+                "coin": 0,
+                "joinDate": "2021-01-10T13:33:30.651Z",
+                "experienceGainDate": 0,
+                "stepToCoin": 0,
+                "gameLoss": 0,
+                "gameWin": 0,
+                "test": 0
+            },
+            "items": [
+                {
+                    "name": "Карта доступа",
+                    "count": 1,
+                    "uses": 10000,
+                    "description": "Ваша персональная карта доступа",
+                    "content": "Вы осмотрели свою карту... карта как карта."
+                }
+            ]
+        },
+        {
+            "id": "746471502735736882",
+            "username": "Sasaki",
+            "properties": {
+                "level": 0,
+                "xp": 0,
+                "warn": 0,
+                "join_hub": false,
+                "coin": 0,
+                "joinDate": "сентябрь 6-го 2021, 04:25:38 дня",
+                "experienceGainDate": 0,
+                "stepToCoin": 0,
+                "gameLoss": 0,
+                "gameWin": 0
+            },
+            "items": []
+        },
+        {
+            "id": "276382723441033216",
+            "username": "ℜ𝔦𝔤𝔥𝔱",
+            "properties": {
+                "level": 0,
+                "xp": 0,
+                "warn": 0,
+                "join_hub": true,
+                "coin": 0,
+                "joinDate": "сентябрь 23-го 2021, 10:48:10 вечера",
+                "experienceGainDate": 0,
+                "stepToCoin": 0,
+                "gameLoss": 0,
+                "gameWin": 0
+            },
+            "items": []
+        }
+    ],
+    "server_list": [
+        {
+            "guild": "Project Baro RP [RUS]",
+            "id": "789579914869080074",
+            "default_role": "798935749104762921",
+            "role": "796792864365084753"
+        },
+        {
+            "guild": "Ketsal [ВЭК]",
+            "id": "796804573154115615",
+            "default_role": "796824184822693969"
+        },
+        {
+            "guild": "Alliance [ВРСК]",
+            "id": "789580508090597396",
+            "default_role": "796830685171941406"
+        },
+        {
+            "guild": "Ursus [ОСНФ]",
+            "id": "799302316984762438",
+            "default_role": "800353986505867305"
+        }
+    ]
+}

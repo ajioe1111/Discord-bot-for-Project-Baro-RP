@@ -1,0 +1,37 @@
+[
+    {
+        "commandName": "clear",
+        "roles": "moderator",
+        "defaultPermission": false
+    },
+    {
+        "commandName": "mute",
+        "roles": "moderator",
+        "defaultPermission": false
+    },
+    {
+        "commandName": "kick",
+        "roles": "gameMaster",
+        "defaultPermission": false
+    },
+    {
+        "commandName": "ban",
+        "roles": "admin",
+        "defaultPermission": false
+    },
+    {
+        "commandName": "banned_word",
+        "roles": "admin",
+        "defaultPermission": false
+    },
+    {
+        "commandName": "delete_word",
+        "roles": "admin",
+        "defaultPermission": false
+    },
+    {
+        "commandName": "say",
+        "roles": "admin",
+        "defaultPermission": false
+    }
+]

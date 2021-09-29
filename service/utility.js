@@ -24,8 +24,21 @@ export function checkPermissions(member, roles) {
     return false;
 }
 
+export function createLog(commandName, message, type) {
+    const embed = new Discord.MessageEmbed()
+        .setColor('#F66666')
+        .setTitle(commandName)
+        .setDescription(message);
+    let log = {
+        type: type,
+        message: embed
+    }
+    sendLogMessage(log);
+}
+
 export function sendLogMessage(msg) {
     if (msg.type == 'command') {
        commandsLogChannel.send({embeds: [msg.message]});
     }
 }
+

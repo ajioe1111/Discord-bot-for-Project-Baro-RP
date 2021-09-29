@@ -33,7 +33,10 @@ for (const file of eventFiles) {
 
 // Когда бот запустился
 client.once('ready', () => {
-	client.guilds.cache.forEach(async guild => await initAppCommands(guild.id));
+	client.guilds.cache.forEach(async guild => {
+		await initAppCommands(guild.id);
+	//	await setAppCommandPermissions('787699629944864839');
+	});
 });
 
 client.on('guildCreate', async (guild) => {
@@ -46,7 +49,11 @@ import { interactionHandler } from './service/interactionHandler.js';
 const rest = new REST({ version: '9' }).setToken(config.token);
 
 async function initAppCommands(guildId) {
-	const commandsInfo = client.commands.map(module => module.data);
+	const commandsInfo = client.commands.map(module => {
+		if (module.data) { module.data.defaultPermission = false }
+		return module.data;
+
+	});
 	try {
 		console.log('Started refreshing application (/) commands.');
 
@@ -54,6 +61,7 @@ async function initAppCommands(guildId) {
 			Routes.applicationGuildCommands(config.client_id, guildId),
 			{ body: commandsInfo },
 		);
+
 		//await rest.put(
 		//Routes.applicationCommands(clientId),
 		//{ body: commands },
@@ -64,6 +72,63 @@ async function initAppCommands(guildId) {
 		console.error(error);
 	}
 };
+
+async function setAppCommandPermissions(guildId) {
+	const userName = 'Fuuka';
+	let user = await getUser(userName, guildId);
+	const command = await getAppCommand('ban', guildId);
+	const guild = await client.guilds.cache.get(guildId);
+	command.defaultPermission = true;
+	guild.commands.edit(command.id, command);
+	// guild.commands.permissions
+	let permissions = [
+		{
+			id: user.id,
+			type: 'USER',
+			permission: false
+		}
+	]
+	//	await command.permissions.add({ permissions });
+	//	await showAppCommandPermissons(command);
+	// user = await getUser('ProjectBaroRP', guildId);
+	// permissions = [
+	// 	{
+	// 		id: user.id,
+	// 		type: 'USER',
+	// 		permission: false
+	// 	}
+	// ]
+	// await command.permissions.set({ permissions });
+	// console.log(await command.permissions.has({ permissionId: user }));
+	// await showAppCommandPermissons(command);
+
+
+}
+
+async function showAppCommandPermissons(command) {
+	const permissions = await command.permissions.fetch();
+	console.log(`Разрешения в команде ${command.name}`);
+	for (let i = 0; i < permissions.length; i++) {
+		const permission = permissions[i];
+		console.log(permission);
+	}
+	console.log();
+}
+
+async function getAppCommand(commandName, guildId) {
+	const guild = await client.guilds.cache.get(guildId);
+	const commands = await guild?.commands.fetch();
+	const command = commands.find(command => command.name === commandName);
+	return command;
+}
+
+async function getUser(userName, guildId) {
+	const guild = await client.guilds.cache.get(guildId);
+	const users = guild.members.cache.map(member => member.user);
+	const user = users.find(user => user.username === userName);
+	return user;
+}
+
 client.on('interactionCreate', async interaction => {
 	await interactionHandler(interaction);
 	if (interaction.customId === 'select') {

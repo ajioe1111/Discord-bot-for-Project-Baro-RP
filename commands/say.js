@@ -1,6 +1,6 @@
 import Discord from 'discord.js';
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { checkPermissions } from '../service/utility.js';
+import { checkPermissions, createLog, sendLogMessage } from '../service/utility.js';
 import { client, owner } from '../bot.js';
 const promisify = f => (...args) => new Promise((a, b) => f(...args, (err, res) => err ? b(err) : a(res)));
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -16,13 +16,17 @@ function botSay(interaction) {
     const text = interaction.options.getString('текст');
     const channelIsValid = interaction.guild.channels.cache.find(ch => ch.id == channel.id);
     if (!channelIsValid) { return interaction.reply({ content: 'Ошибка поиска канала!', ephemeral: true }) };
-    channelIsValid.send(text);
+    channel.send(text);
+    const commandName = 'команда say';
+    const message = `${interaction.member} в канал ${channel} сказал **${text}**`;
+    const type = 'command';
+    createLog(commandName, message, type);
     return;
 }
 
 
+
 export default {
-    roles: ['Game Master', 'Moderator'],
     data: new SlashCommandBuilder()
         .setName('say')
         .addChannelOption(option =>
@@ -37,9 +41,8 @@ export default {
                 .setDescription('Текст сообщения'))
         .setDescription('Позволяет отправить сообщение от имени бота'),
     async execute(interaction) {
-        if (checkPermissions(interaction.member, this.roles) == true || interaction.user.id == owner) {
             await botSay(interaction);
-            await interaction.reply({content: 'Выполнено!', ephemeral: true});
-        } else return interaction.reply({ content: 'Недостаточно прав!', ephemeral: true });
+            await interaction.reply({ content: 'Выполнено!', ephemeral: true });
     },
 };
+

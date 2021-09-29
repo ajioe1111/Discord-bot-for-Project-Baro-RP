@@ -10,7 +10,7 @@ export default {
     async execute(interaction) {
         let randomNumber = Math.floor(Math.random() * 100);
         await interaction.reply(`Вы кидаете кубик...`);
-		await wait(2000);
-		await interaction.editReply(`И вам выпадает **${randomNumber}**`);
+        await wait(2000);
+        await interaction.editReply(`И вам выпадает **${randomNumber}**`);
     },
 };

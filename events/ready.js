@@ -1,5 +1,6 @@
 import Discord from 'discord.js';
 import config from '../configuration.js';
+import { sortCommand } from '../service/permissions.js';
 
 export let hubGuild;
 export let joinLogChannel;
@@ -22,5 +23,6 @@ export default {
 		leaveLogChannel = hubGuild.channels.cache.find(ch => ch.id == config.leaveLog);
 		messageLogChannel = hubGuild.channels.cache.find(ch => ch.id == config.messageLog);
 		commandsLogChannel = hubGuild.channels.cache.find(ch => ch.id == config.commandsLog);
+		sortCommand();
 	},
 };

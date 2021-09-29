@@ -1,7 +1,7 @@
 import Discord from 'discord.js';
 import { MessageActionRow, MessageButton, MessageEmbed } from 'discord.js';
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { checkPermissions, sendLogMessage } from '../service/utility.js';
+import { checkPermissions, createLog, sendLogMessage } from '../service/utility.js';
 import { client, owner } from '../bot.js';
 const promisify = f => (...args) => new Promise((a, b) => f(...args, (err, res) => err ? b(err) : a(res)));
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -12,7 +12,6 @@ let bannedReason;
 
 
 export default {
-    roles: ['Game Master'],
     data: new SlashCommandBuilder()
         .setName('ban')
         .addUserOption(option =>
@@ -59,15 +58,10 @@ export function memberBanned(interaction) {
         let member = memberGuild.members.cache.find(m => m.id == bannedUser.id);
         if (member) {
             member.ban({ reason: bannedReason });
-            const embed = new Discord.MessageEmbed()
-                .setColor('#F66666')
-                .setTitle('команда ban')
-                .setDescription(`${interaction.member} использовал команду **ban** и забанил ${member} за **${bannedReason}** на **${interaction.guild}**`);
-            let log = {
-                type: 'command',
-                message: embed
-            }
-            sendLogMessage(log);
+            const commandName = 'команда ban';
+            const message = `${interaction.member} забанил ${bannedUser} за **${bannedReason}** в ${interaction.guild.name}`;
+            const type = 'command';
+            createLog(commandName, message, type);
             return console.log(`${member} был забанен за ${bannedReason}`);
         }
         else { errorMessage };

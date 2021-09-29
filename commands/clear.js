@@ -1,15 +1,14 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { checkPermissions, sendLogMessage } from '../service/utility.js';
+import { checkPermissions, createLog, sendLogMessage } from '../service/utility.js';
 import Discord from 'discord.js';
 import { MessageEmbed } from 'discord.js';
 
 import { owner } from '../bot.js';
 
 export default {
-	roles: ['Game Admin', 'Moderator'],
 	data: new SlashCommandBuilder()
 		.setName('clear')
-		.setDescription('Удаляет до 99 сообщений.')
+		.setDescription('Удаляет до 100 сообщений.')
 		.addIntegerOption(option =>
 			option
 				.setName('число')
@@ -17,9 +16,7 @@ export default {
 				.setDescription('Число сообщений которые надо удалить')),
 
 	async execute(interaction) {
-		if (checkPermissions(interaction.member, this.roles) == true || interaction.user.id == owner) {
-			await clear(interaction);
-		} else return interaction.reply({ content: `Недостаточно прав!`, ephemeral: true });
+		await clear(interaction);
 	}
 };
 
@@ -38,15 +35,11 @@ async function clear(interaction) {
 		interaction.reply({ content: 'Произошла ошибка при удалении сообщений!', ephemeral: true });
 
 	});
-	const embed = new Discord.MessageEmbed()
-		.setColor('#0099ff')
-		.setTitle('команда clear')
-		.setDescription(`${interaction.member} использовал команду **clear** и удалил \`${interaction.options.getInteger('число')}\` сообщений на **${interaction.guild.name}** в ${interaction.channel}`);
-	let log = {
-		type: 'command',
-		message: embed
-	}
-	sendLogMessage(log);
+	const commandName = 'команда clear';
+	const message = `${interaction.member} удалил **${amount}** сообщений в ${interaction.guild.name}`;
+	const type = 'command';
+	createLog(commandName, message, type);
 	return interaction.reply({ content: `Успешно удалено \`${amount}\` сообщений.`, ephemeral: true });
-
 }
+
+
