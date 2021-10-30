@@ -8,9 +8,9 @@ export function checkMemberRoles(member) {
 }
 
 /**
- * 
- * @param {Discord.GuildMember} member 
- * @param {Discord.Role} roles 
+ *
+ * @param {Discord.GuildMember} member
+ * @param {Discord.Role} roles
  */
 export function checkPermissions(member, roles) {
     const memberRoles = checkMemberRoles(member);
@@ -38,7 +38,7 @@ export function createLog(commandName, message, type) {
 
 export function sendLogMessage(msg) {
     if (msg.type == 'command') {
-       commandsLogChannel.send({embeds: [msg.message]});
+        commandsLogChannel.send({ embeds: [msg.message] });
     }
 }
 

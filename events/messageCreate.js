@@ -1,6 +1,6 @@
 import Discord from 'discord.js';
 import fs from 'fs';
-import { messageLogChannel } from './ready.js';
+import { commandsLogChannel, hubGuild, messageLogChannel } from './ready.js';
 import moment from 'moment';
 import { client } from '../bot.js';
 moment.locale('ru');
@@ -58,18 +58,59 @@ function xpControl(message) {
 	if (getIt) {
 		const randomXp = Math.floor(Math.random() * (120 - 555)) + 555;
 		console.log(`${message.author} получил ${randomXp} опыта`);
-		xpAdd(randomXp, userID, channel);
+		levelSystem(randomXp, userID, channel);
 	}
 }
 /**
  * 
  * @param {Number} count 
- * @param {Discord.Message} message 
+ * @param {Discord.User} userID 
+ */
+export function levelSystem(count, userID, channel) {
+	for (let i = 0; i < userID.length; i++) {
+		xpAdd(count, userID[i], channel);
+	}
+}
+/**
+ * 
+ * @param {Number} count 
  * @param {Discord.User} userID 
  */
 export function xpAdd(count, userID, channel) {
-	
+	const database = JSON.parse(fs.readFileSync(databasePath));
+	let userIndex = database.users_list.findIndex(user => user.id == userID);
+	let setXp = database.users_list[userIndex].properties.xp + count;
+	let xpRemainder = 0;
+	if (count > 19999) {
+		return commandsLogChannel.send(`@everyone Ошибка в получении опыта! нельзя выдать больше 19999 за раз!`);
+	}
+	if (setXp >= 20000) {
+		xpRemainder = setXp - 20000;
+		database.users_list[userIndex].properties.level = database.users_list[userIndex].properties.level + 1;
+		database.users_list[userIndex].properties.xp = xpRemainder;
+		addGem(userIndex, channel, userID);
+		channel.send(`📈 <@${userID}> ***level up!*** твой уровень теперь **${database.users_list[userIndex].properties.level}** 📈`);
+	} else {
+		database.users_list[userIndex].properties.xp = setXp;
+	}
+	database.users_list[userIndex].properties.experienceGainDate = new Date();
+	fs.writeFileSync(databasePath, JSON.stringify(database));
+
+
 }
+function addGem(userIndex, channel, userID) {
+	let step = database.users_list[userIndex].properties.stepToCoin + 1;
+	if (step >= 5) {
+		database.users_list[userIndex].properties.stepToCoin = 0;
+		database.users_list[userIndex].properties.coin = database.users_list[userIndex].properties.coin + 1;
+		channel.send(`💎 <@${userID}> ты получил гем! 💎`);
+	} else {
+		database.users_list[userIndex].properties.stepToCoin = database.users_list[userIndex].properties.stepToCoin + 1;
+	}
+	fs.writeFileSync(databasePath, JSON.stringify(database));
+
+}
+
 
 function checkUrlRoles(message) {
 	const memberRoles = message.member.roles.cache.map(role => role.name)

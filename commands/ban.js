@@ -22,7 +22,6 @@ export default {
     async execute(interaction) {
         bannedUser = interaction.options.getUser('пользователь');
         bannedReason = interaction.options.getString('причина');
-        if (checkPermissions(interaction.member, this.roles) == true || interaction.user.id == owner) {
             const banYes = new MessageActionRow()
                 .addComponents(
                     new MessageButton()
@@ -44,7 +43,6 @@ export default {
             await interaction.reply({ ephemeral: true, embeds: [embed], components: [banYes, banNo] });
             await wait(15000);
             await interaction.editReply({ content: 'Время вышло!', embeds: [], components: [] });
-        } else return interaction.reply({ content: 'Недостаточно прав!', ephemeral: true });
     },
 };
 

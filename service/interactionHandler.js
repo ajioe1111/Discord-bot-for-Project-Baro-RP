@@ -1,12 +1,9 @@
 import Discord from 'discord.js';
-import { MessageActionRow, MessageButton, MessageEmbed } from 'discord.js';
-import { SlashCommandBuilder } from '@discordjs/builders';
-import { checkPermissions } from '../service/utility.js';
-import { client, owner } from '../bot.js';
 import { memberBanned } from '../commands/ban.js';
 import { memberKicked } from '../commands/kick.js';
-const promisify = f => (...args) => new Promise((a, b) => f(...args, (err, res) => err ? b(err) : a(res)));
-const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+import { casinoGame } from '../commands/casino.js';
+import { warn } from '../commands/warn.js';
+
 
 
 
@@ -44,5 +41,24 @@ async function buttonHendler(interaction) {
 		await interaction.update({ content: 'Выполнено!', embeds: [], components: [] });
 	}
 	//Kick end
+	//Casino start
+	if (interaction.customId === 'casino_yes') {
+		await interaction.update({ content: 'Да начнется игра!', components: [] });
+		casinoGame(interaction);
 
+	}
+	if (interaction.customId === 'casino_no') {
+		await interaction.update({ content: 'Как хотите ;)', components: [] });
+	}
+	//Casino end
+	//Warn start
+	if (interaction.customId === 'warnYes') {
+		await interaction.update({ content: 'Выполняю', embeds: [], components: [] });
+		warn(interaction);
+
+	}
+	if (interaction.customId === 'warnNo') {
+		await interaction.update({ content: 'Отмена', embeds: [], components: [] });
+	}
+	//Warn end
 }
